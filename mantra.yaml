@@ -1,0 +1,378 @@
+root: '.'
+panes:
+  - name: Module
+    structure:
+      - directory: actions
+        structure:
+          - file: index.ts
+            template: actionIndex
+      - directory: components
+        structure:
+          - file: stories/index.ts
+            template: storiesIndex
+      - directory: containers
+      - file: routes.tsx
+        template: route
+      - file: index.ts
+        template: module
+  - name: Server
+    structure:
+      - directory: server/publications
+        structure:
+          - file: index.ts
+            template: publicationIndex
+      - directory: server/methods
+        structure:
+          - file: index.ts
+            template: methodIndex
+      - file: server/index.ts
+        template: server
+  - name: Configs
+    structure:
+      - directory: client/configs
+      - directory: lib
+      - directory: public
+      - file: client/configs/context.ts
+        template: context
+      - file: client/index.ts
+        template: client
+
+templates:
+  # Module action template
+  - name: actions
+    text: |
+      class Actions {
+        create({Meteor, LocalState}, myParam) {
+        },
+      };
+      let actions = new Actions();
+      export default actions;
+    placeholders:
+    actions:
+      - type: replace
+        path: index.ts
+        what: const actions = {
+        replace: import $name from "./$name";\nconst actions = {
+      - type: replace
+        path: index.ts
+        what: const actions = {
+        replace: const actions = {\n $name,
+      - type: create
+        path: tests/$name_test.ts
+        text: |
+          const {describe, it} = global;
+          import {expect} from 'chai';
+          import {spy, stub} from 'sinon';
+          import actions from '../posts';
+
+          describe('module.actions.actionSet', () => {
+            describe('create', () => {
+              it('should reject if title is not there', () => {
+                const LocalState = {set: spy()};
+                actions.create({LocalState}, null, 'content');
+                const args = LocalState.set.args[0];
+
+                expect(args[0]).to.be.equal('SAVING_ERROR');
+                expect(args[1]).to.match(/required/);
+              });
+            });
+          });
+  - name: actionIndex
+    create: true
+    text: |
+      const actions = {
+        // ACTION
+      };
+      export default actions;
+  # Module component template
+  - name: storiesIndex
+    create: true
+    text: |
+      // imports
+  - name: components
+    text: |
+      import React from "react";
+
+      interface IProps {
+      }
+
+      export default class $1 extends React.Component {
+        render() {
+          return (
+            <div></div>
+          );
+        }
+      }
+    placeholders:
+      - Component Name
+    actions:
+      - type: create
+        path: tests/$name_test.ts
+        text: |
+          const {describe, it} = global;
+          import {expect} from 'chai';
+          import {shallow} from 'enzyme';
+          import Component from '../$name';
+
+          describe('test', () => {
+            it('should display the post title', () => {
+              const el = shallow(<Component />);
+              expect(el).not.to.be.null;
+            });
+          });
+      - type: create
+        path: stories/$name_stories.ts
+        text: |
+          import React from 'react';
+          import { storiesOf, action } from '@kadira/storybook';
+          import Component from '../$name';
+
+          storiesOf('module.$name', module)
+            .add('default view', () => {
+              return (
+                <Component />
+              );
+            })
+      - type: replace
+        path: stories/index.ts
+        what: // imports
+        replace: |
+          // imports
+          import $name from "./$name_stories";
+  # Module container template
+  - name: containers
+    text: |
+      import { useDeps, composeWithTracker, composeAll } from "../../../configs/context";
+      import Component from "../components/$1";
+
+      interface IProps {
+        context?: () => IContext;
+        clearErrors: Function;
+      }
+
+      export const composer = ({context, clearErrors}, onData) => {
+        const { Meteor, Collections } = context();
+        if (Meteor.subscribe("$3", postId).ready()) {
+          const options = {
+            sort: {createdAt: -1}
+          };
+          const data = {Collections.$2.find({$2}, options).fetch()};
+          onData(null, {data});
+        } else {
+          onData();
+        }
+
+        return clearErrors;
+      };
+
+      export const depsMapper = (context, actions) => ({
+        create: actions.schedule.create,
+        handleSearch: actions.schedule.handleSearch,
+        context: () => context
+      });
+
+      export default composeAll(
+        composeWithTracker(composer),
+        useDeps(depsMapper)
+      )(Component);
+    placeholders:
+      - Component Name
+      - Collection Name
+      - Subscription
+    actions:
+      - type: create
+        path: tests/$name_test.ts
+        text: |
+          const { describe, it } = global;
+          import {expect} from 'chai';
+          import {spy, stub} from 'sinon';
+          import {composer, depsMapper} from '../newpost';
+
+          describe('component', () => {
+            describe('composer', () => {
+              it('should get SAVING_ERROR from local state', () => {
+                const LocalState = {get: spy()};
+                const context = () => ({LocalState});
+
+                composer({context}, spy());
+
+                const args = LocalState.get.args[0];
+                expect(args).to.have.length(1);
+                expect(args[0]).to.be.equal('SAVING_ERROR');
+              });
+            });
+          });
+  # Module route template
+  - name: route
+    show: true
+    create: true
+    text: |
+      import React from "react";
+      import { mount } from "mantra-core";
+
+      export default function (injectDeps) {
+        //const MainLayoutCtx = injectDeps(MainLayout);
+
+        // Move these as a module and call this from a main file
+        // FlowRouter.route("/", {
+        //   name: "ei.list",
+        //   action() {
+        //     mount(MainLayoutCtx, {
+        //       content: () => (<EiList />)
+        //     });
+        //   }
+        // });
+      }
+
+  # Module index template
+  - name: module
+    show: true
+    create: true
+    text: |
+      import actions from "./actions";
+      import routes from "./routes";
+
+      export default {
+        actions,
+        routes
+      };
+
+  # Server publication template
+  - name: server/publications
+    text: |
+      import {Meteor} from 'meteor/meteor';
+      import {check} from 'meteor/check';
+
+      export default function () {
+        Meteor.publish("$1", function () {
+          const selector = {};
+          const options = {
+            // fields: {_id: 1, title: 1},
+            // sort: {createdAt: -1},
+            // limit: 10
+          };
+
+          return $2.find(selector, options);
+        });
+      }
+    placeholders:
+      - Publication Name
+      - Collection
+    actions:
+      - type: replace
+        path: index.ts
+        what: export default function () {
+        replace: |
+          import $name from "./$name";
+          export default function () {
+      - type: replace
+        path: index.ts
+        what: export default function () {
+        replace: |
+          export default function () {
+            $name();
+  # Method template
+  - name: server/methods
+    text: |
+      import {Meteor} from 'meteor/meteor';
+      import {check} from 'meteor/check';
+
+      export default function () {
+        Meteor.methods({
+          '$1'($2) {
+            check($2, String);
+          }
+        });
+      }
+    placeholders:
+      - Method Name
+      - Parameters
+    actions:
+      - type: replace
+        path: index.ts
+        what: export default function () {
+        replace: >
+          import $name from "./$name";
+          export default function () {
+      - type: replace
+        path: index.ts
+        what: export default function () {
+        replace: >
+          export default function () {
+          $name();
+  - name: server
+    create: true
+    show: true
+    text: |
+      import publications from "./publications/index";
+      import methods from "./methods/index";
+      // import addInitialData from "./configs/initial_adds";
+
+      publications();
+      methods();
+      // addInitialData();
+  - name: publicationIndex
+    create: true
+    text: |
+      export default function () {
+      }
+  - name: methodIndex
+    create: true
+    text: |
+      export default function () {
+      }
+
+  # context template
+  - name: context
+    create: true
+    text: |
+      import * as Collections from "../../lib/collections";
+
+      import {Meteor} from 'meteor/meteor';
+      import {FlowRouter} from 'meteor/kadira:flow-router';
+      import {ReactiveDict} from 'meteor/reactive-dict';
+      import {Tracker} from 'meteor/tracker';
+
+      export default function () {
+        return {
+          Meteor,
+          FlowRouter,
+          Collections,
+          LocalState: new ReactiveDict(),
+        };
+      }
+
+  # client index template
+  - name: client
+    create: true
+    show: true
+    text: |
+      import "./configs/config";
+
+      import {createApp} from 'mantra-core';
+
+      import coreModule from "./modules/core/index";
+      import initContext from "./configs/context";
+
+      // init context
+
+      const context = initContext();
+
+      // create app
+
+      const app = createApp(context);
+      app.loadModule(coreModule);
+      app.init();
+    actions:
+      - type: replace
+        path: ../index.ts
+        what: import {createApp} from 'mantra-core';
+        replace: |
+          import {createApp} from 'mantra-core';
+          import $nameModule from "./modules/$name";
+      - type: replace
+        path: ../index.ts
+        what: app.init();
+        replace: |
+          app.loadModule($nameModule);
+          app.init()

@@ -1,7 +1,7 @@
 # FBLOG
 A mini-Facebook clone with simple chat system.
 
-Technology used: MeteorJS + ReactJS
+Technology used: MeteorJS + ReactJS + Mantra
 
 Developer: Mark Melgo and Radley Rosal
 

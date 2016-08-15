@@ -8,6 +8,8 @@ Technology used: MeteorJS + ReactJS + Mantra
 Developer: Mark Melgo and Radley Rosal
 
 ### Installation
+|Important: You need to install meteor, take note that node *might* also be required for some magic to work. We will deploy this app soon.
+
 1. ``` npm run install ```
 2. go to **settings.json** and add your own *cdn keys* or else you **cannot upload** any picture.
 3. Optionally, you can run the tests first using the command ```gagarin``` or ```gagarin -B``` to skip build.

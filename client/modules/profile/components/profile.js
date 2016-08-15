@@ -1,6 +1,7 @@
 import React from 'react';
 import PostStub from '../../post/components/post_stub';
 import {Bert} from 'meteor/themeteorchef:bert';
+import FlipMove from 'react-flip-move';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const {posts,currentUser, deletePost, voteError, error, upVote, downVote, showModal} = this.props;
+    const {posts,voteError, error} = this.props;
     if(error) Bert.alert( voteError, 'danger', 'growl-top-right' );
     $(window).scroll(this.showMoreVisible.bind(this));
     return (
@@ -44,15 +45,16 @@ class Profile extends React.Component {
         <div className='col-md-8' id="profile">
         {
            posts.length > 0 ?
-             posts.map(post => (<PostStub key={post._id} post={post} author={Meteor.users.findOne(post.createdBy)} currentUser={currentUser} deletePost={deletePost}
-                                                upVote = {upVote} downVote={downVote} voteError={voteError} showModal={showModal}/>))
-             :   <div className='row container-fluid col-md-12'>
+              this.renderItems()
+             :  <FlipMove enterAnimation="accordianHorizontal" leaveAnimation="accordianHorizontal" delay="700" duration="800" staggerDelayBy="50">
+              <div className='row container-fluid col-md-12'>
                  <div className="panel panel-default">
                    <div className="panel-body">
                     No Post Available
                    </div>
                  </div>
-               </div>
+               </div> </FlipMove>
+    
         }
         {posts.length != 0 && this.moreResults.bind(this) ?
           <div className='row container-fluid col-md-12' id="showMoreResults">
@@ -62,6 +64,16 @@ class Profile extends React.Component {
         </div>
       </div>
     );
+  }
+
+  renderItems(){
+    const {posts,currentUser, deletePost, voteError, upVote, downVote, showModal} = this.props;
+    return (
+      <FlipMove enterAnimation="elevator" leaveAnimation="elevator" delay="250" duration="600" staggerDelayBy="50">
+      {posts.map(post => (<PostStub key={post._id} post={post} author={Meteor.users.findOne(post.createdBy)} currentUser={currentUser} deletePost={deletePost}
+                                                upVote = {upVote} downVote={downVote} voteError={voteError} showModal={showModal}/>))}
+      </FlipMove>                                         
+    )
   }
 }
 

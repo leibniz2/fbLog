@@ -389,6 +389,10 @@ div.wrapper-header {
     font-family: 'Slabo 27px', serif !important;
 }
 
+#loadMessages{
+    text-align: center;
+}
+
 #msg {
     height: 150px;
     max-height: 150px;

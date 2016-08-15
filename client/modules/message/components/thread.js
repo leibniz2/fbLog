@@ -123,7 +123,7 @@ class Thread extends React.Component {
               </div>
               <div className="panel-body" id="thread">
                 {messages.length != 0 && this.moreResults.bind(this) ?
-                  <a href="#" onClick={this.loadMore.bind(this)}>&lt;&lt;+</a> : ""
+                  <div id="loadMessages"><a href="#" onClick={this.loadMore.bind(this)}>Load Previous Messages</a></div> : ""
                 }
                 {messages.length == 0 ? this.renderSelectedEmpty() : this.renderSelected()}
               </div>

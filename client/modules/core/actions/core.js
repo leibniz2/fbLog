@@ -18,7 +18,7 @@ export default {
     formData.profile.totalUpVotes = 0;
     formData.profile.totalDownVotes = 0;
     formData.profile.totalPosts = 0;
-    formData.profile.isOnline = true;
+    formData.profile.isOnline = false;
     formData.profile.createdAt = new Date();
 
     if(!(formData.profile.picture instanceof window.File) && !(formData.profile.picture instanceof window.Blob)){

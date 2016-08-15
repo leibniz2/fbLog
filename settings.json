@@ -7,8 +7,6 @@
     "staleSessionPurgeInterval": 2000,
     "staleSessionActivityEvents": "mousemove click keydown",
     "isOnline": "true",
-    "admin1": "FhuSxGA5BtvpPKaRf",
-    "admin2": "ToZc766gdbkvmrtKz",
     "reason": "Error 503: Ongoing server maintenance"
   }
 }

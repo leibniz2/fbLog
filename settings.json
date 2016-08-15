@@ -2,8 +2,8 @@
   "AWSAccessKeyId": "enter your own cdn provider key",
   "AWSSecretAccessKey": "enter your own cdn provider key",
    "public": {
-    "staleSessionInactivityTimeout": 60000,
-    "staleSessionHeartbeatInterval": 0,
+    "staleSessionInactivityTimeout": 600000,
+    "staleSessionHeartbeatInterval": 600000,
     "staleSessionPurgeInterval": 2000,
     "staleSessionActivityEvents": "mousemove click keydown",
     "isOnline": "true",

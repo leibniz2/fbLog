@@ -1,0 +1,49 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "meteor": true,
+    "mongo": true
+  },
+
+  "plugins": [
+    "react",
+    "meteor"
+  ],
+
+  "extends": [
+    "airbnb/base",
+    "eslint:recommended",
+    "plugin:meteor/recommended"
+  ],
+
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "globalReturn": true,
+      "jsx": true
+    },
+  },
+
+  "rules": {
+    "import/no-unresolved": [
+      2, {
+        "ignore": [
+          "^meteor/",
+          "lib",
+          "/",
+        ]
+      }
+    ],
+    "require-jsdoc": 0,
+    "complexity": [2, 20],
+    "valid-jsdoc": 0,
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2
+
+
+  }
+}

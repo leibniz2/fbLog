@@ -1,0 +1,14 @@
+{
+  "AWSAccessKeyId": "enter your own cdn provider key",
+  "AWSSecretAccessKey": "enter your own cdn provider key",
+   "public": {
+    "staleSessionInactivityTimeout": 60000,
+    "staleSessionHeartbeatInterval": 0,
+    "staleSessionPurgeInterval": 2000,
+    "staleSessionActivityEvents": "mousemove click keydown",
+    "isOnline": "true",
+    "admin1": "FhuSxGA5BtvpPKaRf",
+    "admin2": "ToZc766gdbkvmrtKz",
+    "reason": "Error 503: Ongoing server maintenance"
+  }
+}

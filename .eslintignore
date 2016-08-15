@@ -1,0 +1,4 @@
+public/**
+client/modules/*/*/tests/*.js
+tests/gagarin/**/**
+packages/**

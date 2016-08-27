@@ -20,11 +20,11 @@ Developer: Mark Melgo and Radley Rosal
 
 ### Screenshots
 
-![Login](https://goo.gl/azGtq2)
-![Home](https://goo.gl/W4omfL)
-![Home-1](https://goo.gl/K9YVgu)
-![Notif](https://goo.gl/MSDdcf)
-![Notif1](https://goo.gl/QCq9Cq)
-![Message](https://goo.gl/03L7Xi)
+![Login](https://goo.gl/9pn8jq)
+![Home](https://goo.gl/JRrwdI)
+![Home-1](https://goo.gl/oJnVbH)
+![Notif](https://goo.gl/Hfq4AN)
+![Notif1](https://goo.gl/Qbh8hR)
+![Message](https://goo.gl/PfIoKo)
 
 #### Feel free to submit ***issues***
